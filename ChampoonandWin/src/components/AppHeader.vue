@@ -9,7 +9,6 @@ const props = defineProps({
   editingNames: { type: Boolean, default: false },
   editNames: { type: Object, required: true },
   photoCount: { type: Number, default: 0 },
-  earliestDate: { type: String, default: 'June 19, 2026' },
 })
 
 const emit = defineEmits(['startEdit', 'saveNames', 'cancelEdit', 'update:editNames'])
@@ -94,9 +93,6 @@ function onKeyEnter() {
       <div class="mt-5 flex justify-center gap-3 flex-wrap">
         <span class="stats-pill">
           📷 {{ photoCount }} {{ photoCount === 1 ? 'memory' : 'memories' }}
-        </span>
-        <span v-if="photoCount > 0 && earliestDate" class="stats-pill">
-          🗓️ Since {{ earliestDate }}
         </span>
       </div>
 
