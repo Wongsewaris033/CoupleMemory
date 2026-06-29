@@ -10,7 +10,7 @@ export function useGallery() {
   let db = null
 
   // ── Couple names ──────────────────────────────────────────────
-  const coupleNames = reactive({ partner1: 'Jumpoon', partner2: 'Win' })
+  const coupleNames = reactive({ partner1: 'Champoon', partner2: 'Win' })
   const editingNames = ref(false)
   const editNames = reactive({ partner1: '', partner2: '' })
 
