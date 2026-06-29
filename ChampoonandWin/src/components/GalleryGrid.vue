@@ -10,7 +10,7 @@ defineProps({
   formatDate: { type: Function, required: true },
 })
 
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['edit', 'delete', 'preview'])
 </script>
 
 <template>
@@ -57,6 +57,7 @@ const emit = defineEmits(['edit', 'delete'])
         :formatDate="formatDate"
         @edit="$emit('edit', $event)"
         @delete="$emit('delete', $event)"
+        @preview="$emit('preview', $event)"
       />
     </div>
 

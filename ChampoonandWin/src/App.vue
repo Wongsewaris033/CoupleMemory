@@ -11,6 +11,7 @@ import UploadArea from './components/UploadArea.vue'
 import GalleryGrid from './components/GalleryGrid.vue'
 import EditModal from './components/EditModal.vue'
 import DeleteModal from './components/DeleteModal.vue'
+import PreviewModal from './components/PreviewModal.vue'
 import AppFooter from './components/AppFooter.vue'
 
 const {
@@ -38,6 +39,11 @@ async function handleSaveEdit(newTitle) {
   if (editModal.photo) await updatePhotoTitle(editModal.photo, newTitle)
   closeEdit()
 }
+
+// ── Preview modal state ────────────────────────────────────────
+const previewPhoto = ref(null)
+function openPreview(photo) { previewPhoto.value = photo }
+function closePreview() { previewPhoto.value = null }
 
 // ── Delete modal state ─────────────────────────────────────────
 const deleteModal = reactive({ open: false, photo: null })
@@ -94,12 +100,19 @@ async function handleConfirmDelete() {
       :formatDate="formatDate"
       @edit="openEdit"
       @delete="openDelete"
+      @preview="openPreview"
     />
 
     <!-- Footer -->
     <AppFooter />
 
   </div>
+
+  <!-- Preview lightbox -->
+  <PreviewModal
+    :photo="previewPhoto"
+    @close="closePreview"
+  />
 
   <!-- Edit title modal -->
   <EditModal

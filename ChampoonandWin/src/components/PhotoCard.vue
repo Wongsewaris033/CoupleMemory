@@ -1,27 +1,37 @@
 <script setup>
 /**
- * PhotoCard — Single memory card with image, title, date, and actions
+ * PhotoCard — Single memory card with uniform image size + preview on click
  */
 defineProps({
   photo: { type: Object, required: true },
   formatDate: { type: Function, required: true },
 })
 
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['edit', 'delete', 'preview'])
 </script>
 
 <template>
   <article class="photo-card" role="listitem" :aria-label="photo.title">
 
-    <!-- Image -->
-    <div class="overflow-hidden" style="max-height:340px;">
+    <!-- Image — fixed square crop, click to preview -->
+    <div
+      class="img-wrapper"
+      @click="$emit('preview', photo)"
+      role="button"
+      tabindex="0"
+      :aria-label="`Preview ${photo.title}`"
+      @keydown.enter="$emit('preview', photo)"
+      @keydown.space.prevent="$emit('preview', photo)"
+    >
       <img
         :src="photo.objectUrl"
         :alt="photo.title"
         loading="lazy"
-        class="w-full lazy-loaded"
-        :style="`aspect-ratio:${photo.aspectRatio || 'auto'};max-height:340px;`"
+        class="lazy-loaded"
       />
+      <div class="preview-overlay">
+        <span class="preview-icon">🔍</span>
+      </div>
     </div>
 
     <!-- Card body -->
@@ -44,14 +54,14 @@ const emit = defineEmits(['edit', 'delete'])
       <!-- Actions -->
       <div class="flex gap-2">
         <button
-          @click="$emit('edit', photo)"
+          @click.stop="$emit('edit', photo)"
           class="btn-ghost text-xs px-3 py-1.5 flex-1"
           :aria-label="`Edit title of ${photo.title}`"
         >
           ✏️ Edit
         </button>
         <button
-          @click="$emit('delete', photo)"
+          @click.stop="$emit('delete', photo)"
           class="text-xs px-3 py-1.5 rounded-full font-semibold flex-1 transition-all duration-200 delete-btn"
           :aria-label="`Delete ${photo.title}`"
         >
@@ -64,6 +74,54 @@ const emit = defineEmits(['edit', 'delete'])
 </template>
 
 <style scoped>
+.img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255,220,228,0.15);
+}
+
+.img-wrapper img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.photo-card:hover .img-wrapper img {
+  transform: scale(1.05);
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(60, 10, 25, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+}
+
+.img-wrapper:hover .preview-overlay {
+  background: rgba(60, 10, 25, 0.28);
+}
+
+.preview-icon {
+  font-size: 1.8rem;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+}
+
+.img-wrapper:hover .preview-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .delete-btn {
   background: rgba(255,220,224,0.5);
   color: #c0505a;
