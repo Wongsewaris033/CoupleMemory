@@ -9,7 +9,7 @@ const props = defineProps({
   editingNames: { type: Boolean, default: false },
   editNames: { type: Object, required: true },
   photoCount: { type: Number, default: 0 },
-  earliestDate: { type: String, default: '' },
+  earliestDate: { type: String, default: 'June 19, 2026' },
 })
 
 const emit = defineEmits(['startEdit', 'saveNames', 'cancelEdit', 'update:editNames'])
